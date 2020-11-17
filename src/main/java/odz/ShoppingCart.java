@@ -6,7 +6,6 @@ import java.text.*;
  */
 public class ShoppingCart {
     public static enum ItemType {NEW, REGULAR, SECOND_FREE, SALE};
-
     /**
      * Tests all class methods.
      */
@@ -96,31 +95,35 @@ public class ShoppingCart {
         int lineLength = width.length - 1;
         for (int w : width)
             lineLength += w;
+
         StringBuilder sb = new StringBuilder();
-// header
+        // header
+        appendFormattedLine(header, align, width, sb, true);
+        // separator
+        appendSeparator(lineLength, sb);
+        // lines
+        for (String[] line : lines) {
+            appendFormattedLine(line, align, width, sb, true);
+        }
+        if (lines.size() > 0) {
+            // separator
+            appendSeparator(lineLength, sb);
+        }
+        // footer
+        appendFormattedLine(footer, align, width, sb, false);
+        return sb.toString();
+    }
+
+    private void appendFormattedLine(String[] header, int[] align, int[] width, StringBuilder sb, Boolean newLine) {
         for (int i = 0; i < header.length; i++)
             appendFormatted(sb, header[i], align[i], width[i]);
-        sb.append("\n");
-// separator
+        if(newLine) sb.append("\n");
+    }
+
+    private void appendSeparator(int lineLength, StringBuilder sb) {
         for (int i = 0; i < lineLength; i++)
             sb.append("-");
         sb.append("\n");
-// lines
-        for (String[] line : lines) {
-            for (int i = 0; i < line.length; i++)
-                appendFormatted(sb, line[i], align[i], width[i]);
-            sb.append("\n");
-        }
-        if (lines.size() > 0) {
-// separator
-            for (int i = 0; i < lineLength; i++)
-                sb.append("-");
-            sb.append("\n");
-        }
-// footer
-        for (int i = 0; i < footer.length; i++)
-            appendFormatted(sb, footer[i], align[i], width[i]);
-        return sb.toString();
     }
 
     private void adjustColmunWidth(int[] width, String[] line) {
