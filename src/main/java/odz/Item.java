@@ -58,4 +58,6 @@ public abstract class Item {
     public double calculateTotalPrice() {
         return getPrice() * getQuantity() * (100.00 - getDiscount()) / 100.00;
     }
+
+
 }

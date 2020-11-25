@@ -21,25 +21,25 @@ class ShoppingCartTest {
     /**
      * Test of calculateDiscount method, of class ShoppingCart.
      */
-    /*
+
     @Test
     public void testCalculateDiscount() {
-        assertEquals(80, new Item("Test",0.00,500).calculateDiscount());
-        assertEquals(73, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 30));
-        assertEquals(71, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 10));
-        assertEquals(70, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 9));
-        assertEquals(70, Item.calculateDiscount(ShoppingCart.ItemType.SALE, 1));
-        assertEquals(0,  Item.calculateDiscount(ShoppingCart.ItemType.NEW, 20));
-        assertEquals(0,  Item.calculateDiscount(ShoppingCart.ItemType.NEW, 10));
-        assertEquals(0,  Item.calculateDiscount(ShoppingCart.ItemType.NEW, 1));
-        assertEquals(80, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 500));
-        assertEquals(53, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 30));
-        assertEquals(51, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 10));
-        assertEquals(50, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 9));
-        assertEquals(50, Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 2));
-        assertEquals(0,  Item.calculateDiscount(ShoppingCart.ItemType.SECOND_FREE, 1));
+        assertEquals(80, new SaleItem("Test",0.00,500).calculateDiscount());
+        assertEquals(73, new SaleItem("Test",0.00,30).calculateDiscount());
+        assertEquals(71, new SaleItem("Test",0.00,10).calculateDiscount());
+        assertEquals(70, new SaleItem("Test",0.00,9).calculateDiscount());
+        assertEquals(70, new SaleItem("Test",0.00,1).calculateDiscount());
+        assertEquals(0, new NewItem("Test",0.00,20).calculateDiscount());
+        assertEquals(0, new NewItem("Test",0.00,10).calculateDiscount());
+        assertEquals(0, new NewItem("Test",0.00,1).calculateDiscount());
+        assertEquals(80, new SecondFreeItem("Test",0.00,500).calculateDiscount());
+        assertEquals(53, new SecondFreeItem("Test",0.00,30).calculateDiscount());
+        assertEquals(51, new SecondFreeItem("Test",0.00,10).calculateDiscount());
+        assertEquals(50, new SecondFreeItem("Test",0.00,9).calculateDiscount());
+        assertEquals(50, new SecondFreeItem("Test",0.00,2).calculateDiscount());
+        assertEquals(0, new SecondFreeItem("Test",0.00,1).calculateDiscount());
     }
-*/
+
     @Test
     public void testAppendFormatted() {
         StringBuilder sb = new StringBuilder();
@@ -57,10 +57,6 @@ class ShoppingCartTest {
         sb = new StringBuilder();
         ShoppingCart.appendFormatted(sb, "SomeLine", -1, 15);
         assertEquals(sb.toString(), "SomeLine        ");
-    }
-
-    @Test
-    void addItem() {
     }
 
     @Test
