@@ -1,46 +1,34 @@
 package odz;
 import java.util.*;
 import java.text.*;
+
 /**
  * Containing items and calculating price.
  */
 public class ShoppingCart {
-    public static enum ItemType {NEW, REGULAR, SECOND_FREE, SALE};
+
+    public void addItem(Item item) {
+        if (item.getTitle() == null || item.getTitle().length() == 0 || item.getTitle().length() > 32)
+            throw new IllegalArgumentException("Illegal title");
+        if (item.getPrice() < 0.01)
+            throw new IllegalArgumentException("Illegal price");
+        if (item.getQuantity() <= 0)
+            throw new IllegalArgumentException("Illegal quantity");
+
+        this.items.add(item);
+    }
+
     /**
      * Tests all class methods.
      */
     public static void main(String[] args) {
 // TODO: add tests here
         ShoppingCart cart = new ShoppingCart();
-        cart.addItem("Apple", 0.99, 5, ItemType.NEW);
-        cart.addItem("Banana", 20.00, 4, ItemType.SECOND_FREE);
-        cart.addItem("A long piece of toilet paper", 17.20, 1, ItemType.SALE);
-        cart.addItem("Nails", 2.00, 500, ItemType.REGULAR);
+        cart.addItem(new NewItem("Apple", 0.99, 5));
+        cart.addItem(new SecondFreeItem("Banana", 20.00, 4));
+        cart.addItem(new SaleItem("A long piece of toilet paper", 17.20, 1));
+        cart.addItem(new RegularItem("Nails", 2.00, 500));
         System.out.println(cart.formatTicket());
-    }
-
-    /**
-     * Adds new item.
-     *
-     * @param title    item title 1 to 32 symbols
-     * @param price    item ptice in USD, > 0
-     * @param quantity item quantity, from 1
-     * @param type     item type
-     * @throws IllegalArgumentException if some value is wrong
-     */
-    public void addItem(String title, double price, int quantity, ItemType type) {
-        if (title == null || title.length() == 0 || title.length() > 32)
-            throw new IllegalArgumentException("Illegal title");
-        if (price < 0.01)
-            throw new IllegalArgumentException("Illegal price");
-        if (quantity <= 0)
-            throw new IllegalArgumentException("Illegal quantity");
-        Item item = new Item();
-        item.setTitle(title);
-        item.setPrice(price);
-        item.setQuantity(quantity);
-        item.setType(type);
-        items.add(item);
     }
 
     /**
@@ -65,12 +53,12 @@ public class ShoppingCart {
         List<String[]> lines = new ArrayList<String[]>();
         String[] header = {"#", "Item", "Price", "Quan.", "Discount", "Total"};
         int[] align = new int[]{1, -1, 1, 1, 1, 1};
-// formatting each line
+        // formatting each line
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            item.setDiscount(calculateDiscount(item.getType(), item.getQuantity()));
-            item.setTotalPrice(item.getPrice() * item.getQuantity() * (100.00 - item.getDiscount()) / 100.00);
+            item.setDiscount(item.calculateDiscount());
+            item.setTotalPrice(item.calculateTotalPrice());
             lines.add(new String[]{
                     String.valueOf(++index),
                     item.getTitle(),
@@ -83,8 +71,8 @@ public class ShoppingCart {
         }
         String[] footer = {String.valueOf(index), "", "", "", "",
                 MONEY.format(total)};
-// formatting table
-// column max length
+        // formatting table
+        // column max length
         int[] width = new int[]{0, 0, 0, 0, 0, 0};
         for (String[] line : lines) {
             adjustColmunWidth(width, line);
@@ -158,98 +146,6 @@ public class ShoppingCart {
         while (after-- > 0)
             sb.append(" ");
         sb.append(" ");
-    }
-
-    /**
-     * Calculates item's discount.
-     * For NEW item discount is 0%;
-     * For SECOND_FREE item discount is 50% if quantity > 1
-     * For SALE item discount is 70%
-     * For each full 10 not NEW items item gets additional 1% discount,
-     * but not more than 80% total
-     */
-    public static int calculateDiscount(ItemType type, int quantity) {
-        int discount = 0;
-        switch (type) {
-            case NEW:
-                return 0;
-            case REGULAR:
-                discount = 0;
-                break;
-            case SECOND_FREE:
-                if (quantity > 1)
-                    discount = 50;
-                break;
-            case SALE:
-                discount = 70;
-                break;
-        }
-        if (discount < 80) {
-            discount += quantity / 10;
-            if (discount > 80)
-                discount = 80;
-        }
-        return discount;
-    }
-
-    /**
-     * item info
-     */
-    private static class Item {
-        private String title;
-        private double price;
-        private int quantity;
-        private ItemType type;
-        private int discount;
-        private double total;
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
-        public ItemType getType() {
-            return type;
-        }
-
-        public void setType(ItemType type) {
-            this.type = type;
-        }
-
-        public int getDiscount() {
-            return discount;
-        }
-
-        public void setDiscount(int discount) {
-            this.discount = discount;
-        }
-
-        public double getTotalPrice() {
-            return total;
-        }
-
-        public void setTotalPrice(double total) {
-            this.total = total;
-        }
     }
 
     /**
